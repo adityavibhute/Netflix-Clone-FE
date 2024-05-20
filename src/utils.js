@@ -9,13 +9,6 @@ export const useLoggedInUser = (url) => {
         dispatch,
     } = useUserContext();
 
-    const updateUserDataInStore = (res) => {
-        userDetails = res?.userDetails;
-        dispatch({ type: storeState.SAVE_USER_DETAILS, payload: res?.userDetails });
-        setLoading(false);
-        setData(res?.userDetails);
-    };
-
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
@@ -31,7 +24,10 @@ export const useLoggedInUser = (url) => {
                 },
                 withCredentials: true
             }).then((res) => {
-                updateUserDataInStore(res?.data);
+                const responseData = res?.data;
+                dispatch({ type: storeState.SAVE_USER_DETAILS, payload: responseData?.userDetails });
+                setLoading(false);
+                setData(responseData?.userDetails);
             }).catch((e) => {
                 console.log('Error in login user', e);
             });
@@ -40,12 +36,12 @@ export const useLoggedInUser = (url) => {
         if (userDetails?.token) {
             setData(userDetails);
             setLoading(false);
-        } else if (document?.cookie && document.cookie.includes('sessionID') || userDetails?.token) {
+        } else if ((document?.cookie && document.cookie.includes('sessionID')) || userDetails?.token) {
             fetchData();
         } else {
             setLoading(false);
         }
-    }, [url]);
+    }, [url, dispatch, userDetails]);
 
     return { loading, data };
 }
