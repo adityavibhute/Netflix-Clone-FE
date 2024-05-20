@@ -2,7 +2,7 @@ import axios from "axios";
 
 const URL = "https://api.themoviedb.org/3";
 const API_KEY = "98ee6ed6cd75ae1b0a841a3b465a863d";
-const USER_API = "http://localhost:3001";
+const USER_API = "https://netflix-clone-be.netlify.app";
 
 const endpoints = {
     originals: "/discover/tv",
